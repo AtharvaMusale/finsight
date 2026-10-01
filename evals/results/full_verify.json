@@ -1,0 +1,996 @@
+{
+  "summary": {
+    "status": "complete",
+    "stopped": null,
+    "questions_done": 32,
+    "questions_total": 32,
+    "answers_flagged_before_revision": 27,
+    "fully_clean_after": 6,
+    "issues_reduced": 13,
+    "issues_unchanged_or_worse": 8,
+    "total_issues_before": 91,
+    "total_issues_after": 51,
+    "routes": {
+      "text": 30,
+      "facts": 2,
+      "both": 0
+    },
+    "issue_kinds_before": {
+      "unsupported_claim": 40,
+      "uncited": 50,
+      "unsupported_number": 1
+    },
+    "answer_checks": {
+      "abstain_correct": 1,
+      "citations_valid": 1,
+      "cites_relevant": 0.607,
+      "false_abstain": 0,
+      "has_citation": 0.964
+    },
+    "by_type_flag_rate": {
+      "cross": "5/5",
+      "numeric": "2/2",
+      "single": "14/17",
+      "unanswerable": "2/4",
+      "yoy": "4/4"
+    }
+  },
+  "questions": [
+    {
+      "id": "x01",
+      "type": "numeric",
+      "question": "What was Apple's total net sales in fiscal 2024?",
+      "route": "text",
+      "answer": "Apple's total net sales in fiscal 2024 were \"$391,035\" million [C1].\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "unsupported_claim"
+      ],
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "unsupported_number",
+        "unsupported_claim"
+      ],
+      "after": [
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "x02",
+      "type": "numeric",
+      "question": "What was Microsoft's revenue growth from fiscal 2023 to fiscal 2024?",
+      "route": "facts",
+      "answer": "Microsoft's revenue was $211,915,000,000 in fiscal 2023 [F1] and $245,122,000,000 in fiscal 2024 [F2], representing a growth rate of 15.67% [K1].\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "unsupported_claim"
+      ],
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": false,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "unsupported_claim"
+      ],
+      "after": [
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s08",
+      "type": "single",
+      "question": "What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?",
+      "route": "text",
+      "answer": "According to the filing, Azure and other cloud services revenue grew 34% in fiscal 2025, driven by \"demand for our portfolio of services\" [C4].",
+      "revisions": 1,
+      "issues": [],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "unsupported_claim"
+      ],
+      "after": [],
+      "verify_passes": 2
+    },
+    {
+      "id": "s12",
+      "type": "single",
+      "question": "How many full-time equivalent employees did Apple report in fiscal 2024?",
+      "route": "text",
+      "answer": "According to the filing, as of September 28, 2024, Apple had approximately 164,000 full-time equivalent employees. [C1]",
+      "revisions": 0,
+      "issues": [],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [],
+      "after": [],
+      "verify_passes": 1
+    },
+    {
+      "id": "y01",
+      "type": "yoy",
+      "question": "How did Microsoft's discussion of OpenAI in its risk factors change between fiscal 2024 and fiscal 2025?",
+      "route": "text",
+      "answer": "In fiscal 2024, Microsoft's risk factors stated that AI \"may be developed by Microsoft or others, including our strategic partner, OpenAI\" and that Microsoft expects \"these elements of our business to grow\" [C1].\n\nIn fiscal 2025, the corresponding risk factor language remained similar, stating that AI \"may be developed by Microsoft or others, including our strategic partner, OpenAI\" and that Microsoft expects \"these elements of our business to grow\" [C5].\n\nHowever, there was one notable addition in fiscal 2025: the filing specified that \"Human review of certain inputs and outputs may be required, including for agentic AI systems that can take actions autonomously\" [C5], whereas the fiscal 2024 version only mentioned that \"Human review of certain outputs may be required\" [C1].\n\nAdditionally, the fiscal 2025 filing's description of AI risks evolved to state they \"stem from issues related to intellectual property, data privacy, and other claims associated with AI training and outputs\" and referenced \"the evolving regulatory landscape, with new laws emerging globally, including the European Union (\"EU\")\" [C5], while the fiscal 2024 version specifically cited \"the European Union's (\"EU\") AI Act and the U.S.'s AI Executive Order\" [C1].\n\nCaveat: 2 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "u01",
+      "type": "unanswerable",
+      "question": "What was Tesla's Cybertruck production volume in 2024?",
+      "route": "text",
+      "answer": "I could not find information about Tesla's Cybertruck production volume in 2024 in the provided filings. The documents provided are NVIDIA financial filings and do not contain data about Tesla's Cybertruck production.",
+      "revisions": 0,
+      "issues": [],
+      "answer_checks": {
+        "abstain_correct": true
+      },
+      "before": [],
+      "after": [],
+      "verify_passes": 1
+    },
+    {
+      "id": "s01",
+      "type": "single",
+      "question": "What risks does NVIDIA cite around export controls on its data center products?",
+      "route": "text",
+      "answer": "# NVIDIA's Cited Risks Around Export Controls on Data Center Products\n\n[C1] Export controls restricting data center GPUs \"may also negatively impact demand for our networking products used in servers containing our GPUs.\"\n\n[C1] Export controls may \"disrupt our supply and distribution chain for a substantial portion of our products, which are warehoused in and distributed from Hong Kong.\"\n\n[C2] Future transitions of operations out of China and Hong Kong \"could be costly and time consuming, and adversely affect our research and development and supply and distribution operations, as well as our revenue, during any such transition period.\"\n\n[C1] \"Any new control that impacts a wider range of our products would likely have a disproportionate impact on NVIDIA and may disadvantage us against certain of our competitors that sell chips that are outside the scope of such control.\"\n\n[C1] Export controls \"have already and may in the future encourage customers outside China and other impacted regions to 'design-out' certain U.S. semiconductors from their products to reduce the compliance burden and risk, and to ensure that they are able to serve markets worldwide.\"\n\n[C1] Export controls \"have already encouraged and may in the future encourage overseas governments to request that our customers purchase from our competitors rather than NVIDIA or other U.S. firms, harming our business, market position, and financial results.\"\n\n[C1] Export controls \"may negatively impact demand for our products and services not only in China, but also in other markets, such as Europe, Latin America, and Southeast Asia.\"\n\n[C2] The licensing process is \"time-consuming\" and there is \"no assurance that the USG will grant such a license or that the USG will act on the license application in a timely manner or at all.\"\n\nCaveat: 4 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "c01",
+      "type": "cross",
+      "question": "Which of Apple, Microsoft and NVIDIA discuss China-related risks in their fiscal 2025 annual reports?",
+      "route": "text",
+      "answer": "**Apple** discusses China-related risks in its fiscal 2025 annual report. The filing notes that \"Greater China net sales decreased during 2025 compared to 2024 primarily due to lower net sales of iPhone, partially offset by higher net sales of Mac.\" [C2]\n\n**NVIDIA** also discusses China-related risks. The filing states: \"Our Data Center revenue in China grew in fiscal year 2025. As a percentage of total Data Center revenue, it remains well below levels seen prior to the onset of export controls in October 2023. The market in China for datacenter solutions remains competitive.\" [C6] Additionally, NVIDIA discusses export control licensing requirements affecting products sold to China. [C6]\n\nThe provided excerpts from Microsoft's fiscal 2025 10-K do not contain discussion of China-related risks.\n\nCaveat: 4 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": false,
+        "coverage": 0.0,
+        "rr": 0.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "y02",
+      "type": "yoy",
+      "question": "How did NVIDIA's export control risk disclosure evolve from fiscal 2024 to fiscal 2025?",
+      "route": "text",
+      "answer": "# Evolution of NVIDIA's Export Control Risk Disclosure from FY2024 to FY2025\n\n## FY2024 Disclosure\nIn fiscal 2024, NVIDIA disclosed that [C2] \"In October 2023, the USG announced new and updated licensing requirements that became effective in our fourth quarter of fiscal year 2024 for exports to China and Country Groups D1, D4, and D5 (including but not limited to Saudi Arabia, the United Arab Emirates, and Vietnam, but excluding Israel) of our products exceeding certain performance thresholds, including A100, A800, H100, H800, L4, L40, L40S and RTX 4090.\"\n\nThe company reported that [C2] \"Our sales to China decreased as a percentage of total Data Center revenue from 19% in fiscal year 2023 to 14% in fiscal year 2024.\"\n\n## FY2025 Disclosure\nBy fiscal 2025, NVIDIA noted [C6] \"Over the past three years, we have been subject to a series of shifting and expanding export control restrictions, impacting our ability to serve customers outside the United States.\"\n\nThe company disclosed that [C8] \"Our Data Center revenue in China grew in fiscal year 2025.\" However, [C8] \"As a percentage of total Data Center revenue, it remains well below levels seen prior to the onset of export controls in October 2023.\"\n\nAdditionally, [C8] \"On January 15, 2025, the USG published the 'AI Diffusion' IFR in the Federal Register. After a 120-day delayed compliance period, the IFR will, unless modified, impose a worldwide licensing requirement on all products classified under Export Control Classification Numbers, or ECCNs, 3A090.a, 4A090.a, or corresponding .z ECCNs, including all related software and technology.\"\n\nCaveat: 2 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "uncited"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 0.5,
+        "rr": 0.16666666666666666
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "uncited"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "u02",
+      "type": "unanswerable",
+      "question": "What is Amazon Web Services' operating margin?",
+      "route": "facts",
+      "answer": "I could not find Amazon Web Services' operating margin in the provided filings.",
+      "revisions": 1,
+      "issues": [],
+      "answer_checks": {
+        "abstain_correct": true
+      },
+      "before": [
+        "uncited"
+      ],
+      "after": [],
+      "verify_passes": 2
+    },
+    {
+      "id": "s02",
+      "type": "single",
+      "question": "Which foundries does NVIDIA rely on to manufacture its chips?",
+      "route": "text",
+      "answer": "Based on NVIDIA's 10-K filings, NVIDIA relies on the following foundries to manufacture its semiconductor wafers [C5][C6]:\n\n1. **Taiwan Semiconductor Manufacturing Company Limited (TSMC)**\n2. **Samsung Electronics Co., Ltd. (Samsung)**\n\nAdditionally, NVIDIA purchases memory from SK Hynix Inc., Micron Technology, Inc., and Samsung, and utilizes CoWoS technology for semiconductor packaging [C5][C6].",
+      "revisions": 0,
+      "issues": [],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 0.2
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [],
+      "after": [],
+      "verify_passes": 1
+    },
+    {
+      "id": "c02",
+      "type": "cross",
+      "question": "How do Apple, Microsoft and NVIDIA each describe antitrust or competition-law risks in fiscal 2025?",
+      "route": "text",
+      "answer": "# Antitrust and Competition-Law Risks in Fiscal 2025\n\n## Apple\nThe provided excerpts do not contain Apple's discussion of antitrust or competition-law risks.\n\n## Microsoft\nMicrosoft describes competition-law risks in its fiscal 2025 10-K. [C3] The company states: \"Government agencies closely scrutinize us under U.S. and foreign competition laws. Governments are actively enforcing competition laws and regulations and enacting new regulations to intervene in digital markets, and this includes markets such as the EU, the United Kingdom, the U.S., and China.\" [C3] Microsoft further notes that \"Competition law enforcement actions and court decisions along with new market regulations may result in fines or hinder our ability to provide the benefits of our software to consumers and businesses, reducing the attractiveness of our products and the revenue that comes from them.\" [C3] The company also states: \"U.S. and foreign antitrust authorities have previously brought enforcement actions and continue to scrutinize our business.\" [C3]\n\n## NVIDIA\nThe provided excerpts do not contain NVIDIA's discussion of antitrust or competition-law risks.\n\nCaveat: 3 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 0.3333333333333333,
+        "rr": 0.3333333333333333
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "y03",
+      "type": "yoy",
+      "question": "Compare Apple's tariff risk language in its fiscal 2024 and fiscal 2025 annual reports.",
+      "route": "text",
+      "answer": "I could not find tariff risk language in the fiscal 2024 10-K excerpt provided.\n\nIn the fiscal 2025 10-K, tariff costs are mentioned in relation to products gross margin. The filing states that \"Products gross margin increased during 2025 compared to 2024 primarily due to favorable costs and a different mix of products, partially offset by tariff costs\" [C8].\n\nThe provided excerpts from the fiscal 2024 10-K do not contain comparable tariff discussion.\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited"
+      ],
+      "final": {
+        "hit": false,
+        "coverage": 0.0,
+        "rr": 0.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "u03",
+      "type": "unanswerable",
+      "question": "What will NVIDIA's stock price be next year?",
+      "route": "text",
+      "answer": "I could not find information about NVIDIA's future stock price in the provided filings. SEC filings contain historical financial data and management's discussion of business operations, but they do not include predictions or forecasts of stock price performance.",
+      "revisions": 1,
+      "issues": [],
+      "answer_checks": {
+        "abstain_correct": true
+      },
+      "before": [
+        "uncited"
+      ],
+      "after": [],
+      "verify_passes": 2
+    },
+    {
+      "id": "s03",
+      "type": "single",
+      "question": "How do tariffs affect Apple's business according to its risk factors?",
+      "route": "text",
+      "answer": "I could not find information about how tariffs affect Apple's business in the provided risk factor excerpts. While the filings discuss various economic risks including \"trade and other international disputes\" [C1][C2][C3], they do not specifically address tariffs or their effects on Apple's operations.",
+      "revisions": 1,
+      "issues": [],
+      "final": {
+        "hit": false,
+        "coverage": 0.0,
+        "rr": 0.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "uncited"
+      ],
+      "after": [],
+      "verify_passes": 2
+    },
+    {
+      "id": "c03",
+      "type": "cross",
+      "question": "Compare how Apple and Microsoft describe their share repurchase programs in fiscal 2025.",
+      "route": "text",
+      "answer": "# Share Repurchase Program Comparison: Apple vs. Microsoft (Fiscal 2025)\n\n## Apple\n\n[C1] In May 2025, the Company announced a new share repurchase program of up to $100 billion. [C1] During 2025, the Company repurchased $89.3 billion of its common stock. [C1] The program does not obligate the Company to acquire a minimum amount of shares.\n\n## Microsoft\n\n[C5] During fiscal year 2025, Microsoft repurchased 31 million shares of its common stock for $13.0 billion through its share repurchase program. [C5] As of June 30, 2025, $57.3 billion remained of its $60 billion share repurchase program.\n\nCaveat: 4 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "y04",
+      "type": "yoy",
+      "question": "How did Microsoft's MD&A description of the Activision acquisition change from fiscal 2024 to fiscal 2025?",
+      "route": "text",
+      "answer": "**Fiscal 2024 Description:**\n\nIn fiscal 2024, Microsoft provided specific quantitative breakdowns of the Activision Blizzard acquisition's impact:\n- \"10 points of net impact from the Activision Blizzard acquisition\" on gross margin [C1]\n- \"34 points of growth from the Activision Blizzard acquisition\" in operating expenses [C1]\n- \"7 points of growth from the Activision Blizzard acquisition\" in R&D [C1]\n- \"6 points of growth from the Activision Blizzard acquisition\" in Sales and Marketing [C2]\n\n**Fiscal 2025 Description:**\n\nIn fiscal 2025, the acquisition was referenced more generally as part of broader business drivers:\n- R&D expenses \"increased $3.0 billion or 10% driven by investments in cloud and AI engineering and Gaming, including the impact of the Activision Blizzard acquisition\" [C5]\n- Sales and Marketing expenses \"increased $1.2 billion or 5% driven by investments in commercial sales and Gaming, including the impact of the Activision Blizzard acquisition\" [C5]\n- General and administrative expenses \"decreased $386 million or 5% driven by Gaming, including the impact of the Activision Blizzard acquisition\" [C7]\n\nThe fiscal 2025 MD&A incorporated the acquisition's impact into broader category descriptions rather than isolating specific percentage point contributions as was done in fiscal 2024.\n\nCaveat: 3 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "uncited",
+        "uncited"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited"
+      ],
+      "after": [
+        "uncited",
+        "uncited",
+        "uncited"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "u04",
+      "type": "unanswerable",
+      "question": "What risk factors did Apple disclose in its fiscal 2019 annual report?",
+      "route": "text",
+      "answer": "No relevant filing excerpts or reported figures were found for that question.",
+      "revisions": 0,
+      "issues": [],
+      "answer_checks": {
+        "abstain_correct": true
+      },
+      "before": [],
+      "after": [],
+      "verify_passes": 0
+    },
+    {
+      "id": "s04",
+      "type": "single",
+      "question": "What legal or regulatory risks does Apple face around the App Store?",
+      "route": "text",
+      "answer": "Apple faces several legal and regulatory risks around the App Store:\n\n**Regulatory Compliance Requirements:**\nApple must comply with regulations like the EU Digital Markets Act (DMA). [C3] The company \"has also implemented changes to iOS, iPadOS, the App Store and Safari in the EU as it seeks to comply with the DMA, including new business terms and alternative fee structures for iOS and iPadOS apps, alternative methods of distribution for iOS and iPadOS apps, alternative payment processing for apps across the Company's operating systems, and additional tools and APIs for developers.\" [C3] The DMA \"provides for significant fines and penalties for noncompliance, and other jurisdictions may seek to require the Company to make changes to its business.\" [C3]\n\n**Litigation and Business Impact:**\n\"The Company is also subject to litigation and investigations relating to the App Store, which have resulted in changes to the Company's business practices, and may in the future result in further changes.\" [C3] These changes affect \"what the Company charges developers for access to its platforms, how it manages distribution of apps outside of the App Store, and how and to what extent it allows developers to communicate with consumers inside the App Store regarding alternative purchasing mechanisms.\" [C4]\n\n**Financial Risk:**\n\"If the rate of the commission that the Company retains on such sales is reduced, or if it is otherwise narrowed in scope or eliminated, the Company's business, results of operations and financial condition could be materially adversely affected.\" [C4]\n\nCaveat: 3 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": false,
+        "coverage": 0.0,
+        "rr": 0.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "c04",
+      "type": "cross",
+      "question": "Which of Apple, Microsoft and NVIDIA mention tariffs as a risk in fiscal 2025?",
+      "route": "text",
+      "answer": "Based on the provided evidence:\n\n**Apple** mentions tariffs as a risk in fiscal 2025. [C2]\n\n**Microsoft** mentions tariffs as part of broader trade policy risks. [C3]\n\n**NVIDIA** does not mention tariffs in the provided evidence.",
+      "revisions": 1,
+      "issues": [],
+      "final": {
+        "hit": false,
+        "coverage": 0.0,
+        "rr": 0.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "after": [],
+      "verify_passes": 2
+    },
+    {
+      "id": "s05",
+      "type": "single",
+      "question": "What does Apple say about its share repurchase program in its fiscal 2024 annual report?",
+      "route": "text",
+      "answer": "According to Apple's fiscal 2024 annual report, the following is stated about its share repurchase program:\n\nThe program does not obligate the Company to acquire a minimum amount of shares. [C1] In May 2024, the Company announced a new share repurchase program of up to $110 billion and raised its quarterly dividend from $0.24 to $0.25 per share beginning in May 2024. [C1] During 2024, the Company repurchased $95.0 billion of its common stock and paid dividends and dividend equivalents of $15.2 billion. [C1] The Company intends to increase its dividend on an annual basis, subject to declaration by the Board. [C1]\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited"
+      ],
+      "after": [
+        "uncited"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "c05",
+      "type": "cross",
+      "question": "How do NVIDIA and Microsoft each discuss supply constraints affecting AI infrastructure?",
+      "route": "text",
+      "answer": "# Supply Constraints Affecting AI Infrastructure\n\n## Microsoft's Discussion\n\nMicrosoft discusses supply constraints for AI infrastructure in several ways. The company states: \"There are limited suppliers for certain critical device and datacenter components, and those items are in short supply.\" [C1] Microsoft notes they \"have experienced and may continue to experience supply constraints, including shortages of semiconductors, networking equipment, power systems, cooling equipment, and other key components.\" [C1]\n\nRegarding the timeline for addressing these constraints, Microsoft states: \"Expanding manufacturing or supply capacity for certain components may require significant investments and multi-year lead times.\" [C1] Microsoft also warns that components may become unavailable or more expensive \"because of supplier capacity constraint, industry shortages, legal or regulatory changes that restrict supply sources, geopolitical tensions, trade restrictions, tariffs, transportation disruptions, supplier financial distress, natural disasters, public health events, instability in regions important to our or our suppliers' supply chains, or other reasons.\" [C1]\n\nMicrosoft notes the potential consequences: \"Any delay or inability to obtain necessary equipment, hardware, or components on acceptable terms and timelines could delay infrastructure deployments, result in reduced sales, higher costs, or inadequate datacenter capacity to support the delivery and continued development of our products and services.\" [C2]\n\n## NVIDIA's Discussion\n\nNVIDIA emphasizes resource availability: \"The availability of data centers, energy, and capital to support the buildout of NVIDIA AI infrastructure by our customers and partners is crucial, and any shortage of these or other necessary resources could impact our future revenue and financial performance.\" [C5]\n\nNVIDIA also discusses manufacturing challenges: \"The complexity of our product transitions and sophisticated system configurations has and may in the future cause delays in production and create challenges in managing supply and demand.\" [C5]\n\nCaveat: 4 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s06",
+      "type": "single",
+      "question": "How does Microsoft describe its relationship with OpenAI in its fiscal 2025 risk factors?",
+      "route": "text",
+      "answer": "Based on the provided evidence, Microsoft describes its relationship with OpenAI in the following ways:\n\n1. **Strategic Partnership**: Microsoft refers to OpenAI as \"our strategic partner\" [C1]. Specifically, Microsoft states that \"This AI may be developed by Microsoft or others, including our strategic partner, OpenAI\" [C1].\n\n2. **Recent Expansion**: Microsoft mentions that \"In January 2023 we announced the third phase of our OpenAI strategic partnership\" [C3].\n\n3. **Third-Party Dependence**: Microsoft acknowledges that it \"has limited ability to control or influence third parties with whom we have arrangements, which may impact our ability to realize the anticipated benefits\" [C3].\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s07",
+      "type": "single",
+      "question": "How did the Activision Blizzard acquisition affect Microsoft's fiscal 2024 results?",
+      "route": "text",
+      "answer": "# Impact of Activision Blizzard Acquisition on Microsoft's Fiscal 2024 Results\n\n## Acquisition Details\nMicrosoft completed the acquisition of Activision Blizzard on October 13, 2023, for a total purchase price of $75.4 billion in cash [C3]. The financial results have been included in consolidated financial statements since the acquisition date, with Activision Blizzard reported as part of the More Personal Computing segment [C3].\n\n## Key Financial Impacts\n\n**Gross Margin:**\nGross margin increased $6.8 billion, with 10 points of net impact from the Activision Blizzard acquisition [C1].\n\n**Operating Expenses:**\nOperating expenses increased $3.9 billion or 31%, with 34 points of growth from the Activision Blizzard acquisition [C1]. Research and development expenses increased $2.3 billion or 9%, with 7 points of growth from the acquisition [C1]. Sales and marketing expenses increased $1.7 billion or 7%, with 6 points of growth from the acquisition [C2]. General and administrative expenses increased slightly, with growth from the acquisition offset in part by prior year charges [C2].\n\n**Revenue:**\nXbox content and services revenue increased 50%, driven by 44 points of net impact from the Activision Blizzard acquisition, reflecting the change of Activision Blizzard content from third-party to first-party [C4].\n\n**Overall Operating Impact:**\nOperating expenses increased $4.0 billion or 7% overall, with 7 points of growth from the Activision Blizzard acquisition [C5].\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited"
+      ],
+      "after": [
+        "uncited"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s09",
+      "type": "single",
+      "question": "What drove NVIDIA's Data Center revenue in fiscal 2024?",
+      "route": "text",
+      "answer": "NVIDIA's Data Center revenue in fiscal 2024 was driven by several factors:\n\n1. **Strong demand from multiple sources**: \"Strong demand was driven by enterprise software and consumer internet applications, and multiple industry verticals including automotive, financial services, and healthcare.\" [C2]\n\n2. **AI and machine learning workloads**: \"Compute grew 266% due to higher shipments of the NVIDIA Hopper GPU computing platform for the training and inference of LLMs, recommendation engines and generative AI applications.\" [C3]\n\n3. **Cloud and on-premises access**: \"Customers across industry verticals access NVIDIA AI infrastructure both through the cloud and on-premises.\" [C2]\n\n4. **Large cloud provider adoption**: \"In the fourth quarter of fiscal year 2024, large cloud providers represented more than half of our Data Center revenue, supporting both internal workloads and external customers.\" [C1]\n\nAdditionally, \"approximately 40% of Data Center revenue was for AI inference\" in fiscal 2024 [C1], reflecting significant demand for AI inference platforms alongside training workloads.\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited"
+      ],
+      "after": [
+        "uncited"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s10",
+      "type": "single",
+      "question": "How does NVIDIA describe its competition?",
+      "route": "text",
+      "answer": "Based on the provided filings, NVIDIA does not provide a detailed description of its competition. The only reference to competition appears in a section header in the FY2025 10-K that states \"Competition could adversely impact our market share and financial results\" [C2], but no elaboration on specific competitors or competitive dynamics follows in the excerpts provided.\n\nThe filings do mention that NVIDIA faces regulatory scrutiny related to competition, with regulators in the European Union, United States, United Kingdom, South Korea, and China requesting information \"regarding our sales of GPUs and other NVIDIA products\" and \"the markets in which we compete and our competition\" [C1], but the actual competitive landscape is not described in the available evidence.\n\nTo find NVIDIA's description of its competition, you would need to review the full \"Competition\" section of the 10-K filing, which is not included in the provided excerpts.",
+      "revisions": 0,
+      "issues": [],
+      "final": {
+        "hit": false,
+        "coverage": 0.0,
+        "rr": 0.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [],
+      "after": [],
+      "verify_passes": 1
+    },
+    {
+      "id": "s11",
+      "type": "single",
+      "question": "What does Apple say about depending on single-source suppliers or outsourcing partners?",
+      "route": "text",
+      "answer": "Apple states the following about its dependence on single-source suppliers and outsourcing partners:\n\n[C2] \"The Company relies on single-source outsourcing partners in the U.S., Asia and Europe to supply and manufacture many components, and on outsourcing partners primarily located in Asia, for final assembly of substantially all of the Company's hardware products.\"\n\n[C2] \"Any failure of these partners to perform can have a negative impact on the Company's cost or supply of components or finished goods.\"\n\n[C5] \"The Company's new products often utilize custom components available from only one source. When a component or product uses new technologies, initial capacity constraints may exist until the suppliers' yields have matured or their manufacturing capacities have increased.\"\n\n[C6] \"The Company may not be able to extend or renew agreements for the supply of components on similar terms, or at all, and may not be successful in obtaining sufficient quantities from its suppliers in a timely manner, or in identifying and obtaining sufficient quantities from an alternative source.\"\n\n[C6] \"Therefore, the Company remains subject to significant risks of supply shortages and price increases that can materially adversely affect its business, results of operations, financial condition and stock price.\"\n\nCaveat: 3 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 0.25
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s13",
+      "type": "single",
+      "question": "What operating segments does Microsoft report?",
+      "route": "text",
+      "answer": "Based on the SEC filings, Microsoft reports three operating segments [C1]:\n\n1. **Productivity and Business Processes** [C1]\n2. **Intelligent Cloud** [C1]\n3. **More Personal Computing** [C1]",
+      "revisions": 1,
+      "issues": [],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 0.25
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "unsupported_claim"
+      ],
+      "after": [],
+      "verify_passes": 2
+    },
+    {
+      "id": "s14",
+      "type": "single",
+      "question": "What foreign currency risk does Microsoft disclose in its market risk section?",
+      "route": "text",
+      "answer": "Microsoft discloses foreign currency risk in the following ways [C1]:\n\n**Types of Exposure:**\n\"Certain forecasted transactions, assets, and liabilities are exposed to foreign currency risk.\" [C1] \"Principal currency exposures include the Euro, Japanese yen, British pound, Canadian dollar, and Australian dollar.\" [C1]\n\n**Risk Management:**\n\"We monitor our foreign currency exposures daily to maximize the economic effectiveness of our foreign currency positions, including hedges.\" [C1]\n\n**Sensitivity Analysis:**\nMicrosoft provides sensitivity analysis showing potential losses from a 10% decrease in foreign exchange rates:\n\n- Foreign currency \u2013 Revenue impact on earnings: $(8,122) million as of June 30, 2023 [C1]; $(9,605) million as of June 30, 2024 [C2]; $(11,596) million as of June 30, 2025 [C3]; $(13,653) million as of June 30, 2026 [C4]\n\n- Foreign currency \u2013 Investments impact on fair value: $(29) million as of June 30, 2023 [C1]; $(38) million as of June 30, 2024 [C2]; $(17) million as of June 30, 2025 [C3]; $(5) million as of June 30, 2026 [C4]\n\nCaveat: 4 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 0.3333333333333333
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s15",
+      "type": "single",
+      "question": "What interest rate risk does Apple disclose?",
+      "route": "text",
+      "answer": "Based on Apple's 10-K filings, the Company discloses the following interest rate risks [C1][C2]:\n\n**Primary Exposure:**\n\"The Company is primarily exposed to fluctuations in U.S. interest rates and their impact on the Company's investment portfolio and term debt.\" [C1]\n\n**Negative Impacts:**\n\"Increases in interest rates will negatively affect the fair value of the Company's investment portfolio and increase the interest expense on the Company's term debt.\" [C1]\n\n**Risk Management Strategies:**\n\"To protect against interest rate risk, the Company may use derivative instruments, offset interest rate\u2013sensitive assets and liabilities, or control duration of the investment and term debt portfolios.\" [C1]\n\n**Quantified Exposure:**\nAs of September 27, 2025, a hypothetical 100 basis point increase in interest rates would result in a decline in fair value of the investment portfolio of \"$2,416\" million and an increase in annual interest expense of \"$129\" million [C2].\n\nCaveat: 1 statement in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 0.5
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "after": [
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s16",
+      "type": "single",
+      "question": "What cybersecurity risks does Microsoft describe in its fiscal 2025 risk factors?",
+      "route": "text",
+      "answer": "Microsoft describes several cybersecurity risks in its fiscal 2025 risk factors:\n\n**Threats to Internal and Customer Systems:**\n[C5] \"Threat actors, including individual and groups of hackers and sophisticated organizations, including nation-states, state-sponsored organizations, or cybercriminal groups, continuously undertake attacks that pose threats to our customers and our internal infrastructure, and we have experienced cybersecurity incidents in which such actors have gained unauthorized access to our systems and data, including customer systems and data.\"\n\n**Attack Methods:**\nThese actors employ [C5] \"a wide variety of methods, which include developing and deploying malicious software; exploiting known and potential vulnerabilities or intentionally designed processes in our or third-party hardware, software, or other infrastructure to attack our products and services or gain access to our networks and datacenters; using social engineering techniques to induce our employees, users, partners, or customers to disclose sensitive information, such as passwords, or take other actions to gain access to our data or our users' or customers' data; or acting in a coordinated manner or conducting coordinated attacks.\"\n\n**Specific Incident:**\n[C5] \"Beginning in late November 2023, a nation-state associated threat actor used a password spray attack to compromise a legacy test account and, in turn, gain access to Microsoft email accounts.\"\n\n**Regulatory and Operational Costs:**\n[C1] \"Legislative and regulatory actions related to cybersecurity may increase the costs associated with developing, implementing, or securing our products and services.\"\n\nCaveat: 5 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      },
+      "before": [
+        "uncited",
+        "uncited"
+      ],
+      "after": [
+        "uncited",
+        "uncited",
+        "uncited",
+        "uncited",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    },
+    {
+      "id": "s17",
+      "type": "single",
+      "question": "In its quarterly reports, how does Apple discuss tariffs?",
+      "route": "text",
+      "answer": "Apple discusses tariffs in the following ways:\n\n**General Impact Statement:**\n\"Tariffs and other measures that are applied to the Company's products or their components can have a material adverse impact on the Company's business, results of operations and financial condition, including impacting the Company's supply chain, the availability of rare earths and other raw materials and components, pricing and gross margin.\" [C4]\n\n**Uncertainty About Future Impact:**\n\"The ultimate impact remains uncertain and will depend on several factors, including whether additional or incremental U.S. tariffs or other measures are announced or imposed, to what extent other countries implement tariffs or other retaliatory measures in response, and the overall magnitude and duration of these measures.\" [C4]\n\n**Broader Economic Effects:**\n\"Trade and other international disputes can have an adverse impact on the overall macroeconomic environment and result in shifts and reductions in consumer spending and negative consumer sentiment for the Company's products and services, all of which can further adversely affect the Company's business and results of operations.\" [C4]\n\n**Macroeconomic Context:**\nIn other quarterly reports, Apple references tariffs as part of broader discussions of macroeconomic conditions alongside inflation, interest rates, and currency fluctuations. [C2][C3][C5]\n\nCaveat: 2 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "uncited",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": false,
+        "coverage": 0.0,
+        "rr": 0.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": false
+      },
+      "before": [
+        "uncited"
+      ],
+      "after": [
+        "uncited",
+        "unsupported_claim"
+      ],
+      "verify_passes": 2
+    }
+  ]
+}

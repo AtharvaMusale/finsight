@@ -1,0 +1,596 @@
+{
+  "runs": [
+    {
+      "config": {
+        "alpha": 0.5,
+        "rerank": "pinecone",
+        "retrieve_k": 30,
+        "final_k": 6,
+        "dense_model": "llama-text-embed-v2",
+        "sparse_model": "pinecone-sparse-english-v0",
+        "llm_model": null,
+        "smoke": false
+      },
+      "summary": {
+        "n_questions": 30,
+        "n_answerable": 26,
+        "retrieval": {
+          "pool@30": {
+            "hit": 0.808,
+            "coverage": 0.782,
+            "mrr": 0.572
+          },
+          "top@6": {
+            "hit": 0.769,
+            "coverage": 0.712,
+            "mrr": 0.57
+          },
+          "final@6": {
+            "hit": 0.692,
+            "coverage": 0.654,
+            "mrr": 0.628
+          }
+        },
+        "by_type": {
+          "cross": {
+            "hit": 0.2,
+            "coverage": 0.1,
+            "mrr": 0.1
+          },
+          "single": {
+            "hit": 0.882,
+            "coverage": 0.882,
+            "mrr": 0.843
+          },
+          "yoy": {
+            "hit": 0.5,
+            "coverage": 0.375,
+            "mrr": 0.375
+          }
+        }
+      },
+      "questions": [
+        {
+          "id": "s01",
+          "type": "single",
+          "question": "What risks does NVIDIA cite around export controls on its data center products?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s02",
+          "type": "single",
+          "question": "Which foundries does NVIDIA rely on to manufacture its chips?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.5
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.5
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s03",
+          "type": "single",
+          "question": "How do tariffs affect Apple's business according to its risk factors?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.2
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.2
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "s04",
+          "type": "single",
+          "question": "What legal or regulatory risks does Apple face around the App Store?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s05",
+          "type": "single",
+          "question": "What does Apple say about its share repurchase program in its fiscal 2024 annual report?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s06",
+          "type": "single",
+          "question": "How does Microsoft describe its relationship with OpenAI in its fiscal 2025 risk factors?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.5
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.5
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s07",
+          "type": "single",
+          "question": "How did the Activision Blizzard acquisition affect Microsoft's fiscal 2024 results?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s08",
+          "type": "single",
+          "question": "What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s09",
+          "type": "single",
+          "question": "What drove NVIDIA's Data Center revenue in fiscal 2024?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s10",
+          "type": "single",
+          "question": "How does NVIDIA describe its competition?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.25
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.25
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.3333333333333333
+          }
+        },
+        {
+          "id": "s11",
+          "type": "single",
+          "question": "What does Apple say about depending on single-source suppliers or outsourcing partners?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s12",
+          "type": "single",
+          "question": "How many full-time equivalent employees did Apple report in fiscal 2024?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s13",
+          "type": "single",
+          "question": "What operating segments does Microsoft report?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.5
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.5
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s14",
+          "type": "single",
+          "question": "What foreign currency risk does Microsoft disclose in its market risk section?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s15",
+          "type": "single",
+          "question": "What interest rate risk does Apple disclose?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s16",
+          "type": "single",
+          "question": "What cybersecurity risks does Microsoft describe in its fiscal 2025 risk factors?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.16666666666666666
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.16666666666666666
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "s17",
+          "type": "single",
+          "question": "In its quarterly reports, how does Apple discuss tariffs?",
+          "pool": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "top": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "c01",
+          "type": "cross",
+          "question": "Which of Apple, Microsoft and NVIDIA discuss China-related risks in their fiscal 2025 annual reports?",
+          "pool": {
+            "hit": true,
+            "coverage": 0.3333333333333333,
+            "rr": 0.0625
+          },
+          "top": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "c02",
+          "type": "cross",
+          "question": "How do Apple, Microsoft and NVIDIA each describe antitrust or competition-law risks in fiscal 2025?",
+          "pool": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "top": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "c03",
+          "type": "cross",
+          "question": "Compare how Apple and Microsoft describe their share repurchase programs in fiscal 2025.",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 0.5,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 0.5,
+            "rr": 0.5
+          }
+        },
+        {
+          "id": "c04",
+          "type": "cross",
+          "question": "Which of Apple, Microsoft and NVIDIA mention tariffs as a risk in fiscal 2025?",
+          "pool": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "top": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "c05",
+          "type": "cross",
+          "question": "How do NVIDIA and Microsoft each discuss supply constraints affecting AI infrastructure?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.2
+          },
+          "top": {
+            "hit": true,
+            "coverage": 0.5,
+            "rr": 0.2
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "y01",
+          "type": "yoy",
+          "question": "How did Microsoft's discussion of OpenAI in its risk factors change between fiscal 2024 and fiscal 2025?",
+          "pool": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "top": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "y02",
+          "type": "yoy",
+          "question": "How did NVIDIA's export control risk disclosure evolve from fiscal 2024 to fiscal 2025?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 0.5
+          },
+          "top": {
+            "hit": true,
+            "coverage": 0.5,
+            "rr": 0.5
+          },
+          "final": {
+            "hit": true,
+            "coverage": 0.5,
+            "rr": 0.5
+          }
+        },
+        {
+          "id": "y03",
+          "type": "yoy",
+          "question": "Compare Apple's tariff risk language in its fiscal 2024 and fiscal 2025 annual reports.",
+          "pool": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "top": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          },
+          "final": {
+            "hit": false,
+            "coverage": 0.0,
+            "rr": 0.0
+          }
+        },
+        {
+          "id": "y04",
+          "type": "yoy",
+          "question": "How did Microsoft's MD&A description of the Activision acquisition change from fiscal 2024 to fiscal 2025?",
+          "pool": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "top": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          },
+          "final": {
+            "hit": true,
+            "coverage": 1.0,
+            "rr": 1.0
+          }
+        },
+        {
+          "id": "u01",
+          "type": "unanswerable",
+          "question": "What was Tesla's Cybertruck production volume in 2024?"
+        },
+        {
+          "id": "u02",
+          "type": "unanswerable",
+          "question": "What is Amazon Web Services' operating margin?"
+        },
+        {
+          "id": "u03",
+          "type": "unanswerable",
+          "question": "What will NVIDIA's stock price be next year?"
+        },
+        {
+          "id": "u04",
+          "type": "unanswerable",
+          "question": "What risk factors did Apple disclose in its fiscal 2019 annual report?"
+        }
+      ]
+    }
+  ]
+}

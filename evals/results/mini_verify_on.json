@@ -1,0 +1,110 @@
+{
+  "config": {
+    "verify": true,
+    "ids": [
+      "s12",
+      "s08",
+      "y01",
+      "u01"
+    ]
+  },
+  "summary": {
+    "n_questions": 4,
+    "answers": {
+      "false_abstain": 0.0,
+      "has_citation": 1.0,
+      "citations_valid": 1.0,
+      "cites_relevant": 1.0,
+      "abstain_correct": 1.0
+    },
+    "verification": {
+      "answers_with_issues": 0.25,
+      "issue_kinds": {
+        "unsupported_claim": 2
+      },
+      "answers_revised": 0.5,
+      "routes": {
+        "text": 4,
+        "facts": 0,
+        "both": 0
+      }
+    }
+  },
+  "questions": [
+    {
+      "id": "s08",
+      "type": "single",
+      "question": "What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?",
+      "route": "text",
+      "answer": "According to the filing, Azure and other cloud services revenue grew 34% in fiscal 2025, driven by \"demand for our portfolio of services\" [C4].",
+      "revisions": 1,
+      "issues": [],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      }
+    },
+    {
+      "id": "s12",
+      "type": "single",
+      "question": "How many full-time equivalent employees did Apple report in fiscal 2024?",
+      "route": "text",
+      "answer": "According to the filing, as of September 28, 2024, Apple had approximately 164,000 full-time equivalent employees. [C1]",
+      "revisions": 0,
+      "issues": [],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      }
+    },
+    {
+      "id": "y01",
+      "type": "yoy",
+      "question": "How did Microsoft's discussion of OpenAI in its risk factors change between fiscal 2024 and fiscal 2025?",
+      "route": "text",
+      "answer": "In fiscal 2024, Microsoft's risk factors stated that AI \"may be developed by Microsoft or others, including our strategic partner, OpenAI\" and that Microsoft expects \"these elements of our business to grow\" [C1].\n\nIn fiscal 2025, the corresponding risk factor language remained similar, stating that AI \"may be developed by Microsoft or others, including our strategic partner, OpenAI\" and that Microsoft expects \"these elements of our business to grow\" [C5].\n\nHowever, there was one notable addition in fiscal 2025: the filing specified that \"Human review of certain inputs and outputs may be required, including for agentic AI systems that can take actions autonomously\" [C5], whereas the fiscal 2024 version only mentioned that \"Human review of certain outputs may be required\" [C1].\n\nAdditionally, the fiscal 2025 filing's description of AI risks evolved to state they \"stem from issues related to intellectual property, data privacy, and other claims associated with AI training and outputs\" and referenced \"the evolving regulatory landscape, with new laws emerging globally, including the European Union (\"EU\")\" [C5], while the fiscal 2024 version specifically cited \"the European Union's (\"EU\") AI Act and the U.S.'s AI Executive Order\" [C1].\n\nCaveat: 2 statements in this answer could not be verified against the cited filings; treat with care.",
+      "revisions": 1,
+      "issues": [
+        "unsupported_claim",
+        "unsupported_claim"
+      ],
+      "final": {
+        "hit": true,
+        "coverage": 1.0,
+        "rr": 1.0
+      },
+      "answer_checks": {
+        "false_abstain": false,
+        "has_citation": true,
+        "citations_valid": true,
+        "cites_relevant": true
+      }
+    },
+    {
+      "id": "u01",
+      "type": "unanswerable",
+      "question": "What was Tesla's Cybertruck production volume in 2024?",
+      "route": "text",
+      "answer": "I could not find information about Tesla's Cybertruck production volume in 2024 in the provided filings. The documents provided are NVIDIA financial filings and do not contain data about Tesla's Cybertruck production.",
+      "revisions": 0,
+      "issues": [],
+      "answer_checks": {
+        "abstain_correct": true
+      }
+    }
+  ]
+}
