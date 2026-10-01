@@ -124,38 +124,35 @@ uv run python -m finsight.trace_cli --last
 
 ## Using FinSight
 
-Four ways in. All of them run the same pipeline and leave a trace you can inspect. For a scripted tour of all of them, see the [Demo walkthrough](#demo-walkthrough).
-
-| Interface | Best for | Setup |
-|---|---|---|
-| [HTTP API](#http-api) | scripts and UIs | `uvicorn` on :8000 |
-| [MCP server](#mcp-server) | asking from Claude Code or Claude Desktop, or calling one tool directly | `claude mcp add ...` once |
-| [A2A agents](#a2a-agents) | running retrieval, facts and verification as separate services | one terminal per worker |
-| [CLI](#cli) | retrieval plus a cited answer, no orchestration | none |
+Four ways in. All of them run the same pipeline and leave a trace you can inspect.
 
 ### HTTP API
 
-Start it as in the Quickstart. It exposes `POST /ask`, `GET /traces/{id}` and `GET /health`.
-
-```bash
-uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000
-curl -s localhost:8000/health
-```
+Start it as in the Quickstart. It exposes `POST /ask`, `GET /traces/{id}` and `GET /health`, and
+FastAPI serves an interactive page at <http://127.0.0.1:8000/docs> where you can try `POST /ask`
+from the browser.
 
 ### MCP server
 
-Four read-only tools: `search_filings`, `query_financials`, `calculate`, `ask_finsight`.
+Four read-only tools that any MCP client (Claude Code, Claude Desktop) can call:
 
-**Use it from Claude Code** (once, from the repository folder):
+| Tool | What it does | Needs |
+|---|---|---|
+| `calculate` | Deterministic maths: `ratio`, `pct_change`, `margin`, `cagr` (named inputs, no `eval`) | nothing |
+| `query_financials` | Text-to-SQL over the XBRL facts; returns the `sql`, the `rows` and derived `calculations` | Anthropic key, DuckDB data |
+| `search_filings` | Hybrid search; returns ranked passages with `ticker`, `section`, `accession_no` | Pinecone key |
+| `ask_finsight` | The whole pipeline: a cited, verified answer (several model calls, so slower) | both keys |
+
+Every response carries a `trace_id` you can open with `uv run python -m finsight.trace_cli <trace_id>`.
+
+**Use it from Claude Code** (once, from the repository folder), then run `/mcp` inside Claude Code
+to confirm `finsight` is connected:
 
 ```bash
 claude mcp add finsight -- uv --directory "$(pwd)" run python -m finsight.mcp_server
 ```
 
-Then run `/mcp` inside Claude Code to see that `finsight` is connected, and ask questions as
-usual. "already exists in local config" just means it is already registered.
-
-**Test the tools directly** with the MCP Inspector. The server speaks stdio and is started by its
+**Try the tools directly** with the MCP Inspector. The server speaks stdio and is started by its
 client, so running it by hand only waits for input.
 
 ```bash
@@ -163,26 +160,15 @@ npx @modelcontextprotocol/inspector uv run python -m finsight.mcp_server
 ```
 
 Open the printed `http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=...` URL, click **Connect**, then
-**Tools → List Tools**. Try them in this order (the first needs no keys or data):
-
-| Tool | Arguments | Expect |
-|---|---|---|
-| `calculate` | `op`: `ratio`, `inputs`: `{"numerator": 391035, "denominator": 364984}` | `value` 1.0714 and the `formula` used |
-| `query_financials` | `question`: `"Apple revenue for fiscal 2024"` | the generated `sql`, `rows` from DuckDB, derived `calculations` |
-| `search_filings` | `query`: `"export restrictions China"`, `tickers`: `["NVDA"]` | ranked filing passages with `ticker`, `section`, `accession_no` |
-| `ask_finsight` | `question`: `"What was NVIDIA's data center revenue last fiscal year?"` | a cited, verified answer (several model calls, so slower) |
-
-`calculate` takes named inputs: `ratio` (`numerator`, `denominator`), `pct_change` (`old`, `new`),
-`margin` (`part`, `whole`), `cagr` (`begin`, `end`, `years`). Every response carries a `trace_id`
-you can open with `uv run python -m finsight.trace_cli <trace_id>`. Press `Ctrl+C` to stop the
-Inspector, which also stops the server it launched.
+**Tools -> List Tools**. `calculate` is a good first call because it needs no keys or data, for
+example `op`: `ratio`, `inputs`: `{"numerator": 391035, "denominator": 364984}` gives `1.0714`.
 
 ### A2A agents
 
-Retrieval, facts and verification can run as separate agents, each with an Agent Card. The analyst
-(the API) delegates to them only when their URL is set; anything unset stays in-process. Once a
-URL is set, `/ask` returns an error if that agent is not running, so start the workers first, and
-remove the variable to go back to single-process mode.
+Retrieval, facts and verification can run as separate agents, each publishing an Agent Card. The
+analyst (the API) delegates to an agent only when its URL is set; anything unset stays in-process.
+Once a URL is set, `/ask` returns an error if that agent is not running, so start the workers
+first, and remove the variable to go back to single-process mode.
 
 | Agent | Command | Port |
 |---|---|---|
@@ -191,16 +177,15 @@ remove the variable to go back to single-process mode.
 | verifier | `uv run python -m finsight.agents verifier` | 9103 |
 | analyst | `uv run python -m finsight.agents analyst` (optional, the API can act as analyst) | 9100 |
 
-**Test agent-to-agent communication.** Start the three workers, one terminal each, then check that
-each is up and read its Agent Card (name, skills and `/rpc` endpoint):
+To try it, start the three workers (one terminal each) and read an Agent Card, which lists the
+agent's name, skills and `/rpc` endpoint:
 
 ```bash
-curl -s http://127.0.0.1:9101/health
 curl -s http://127.0.0.1:9101/.well-known/agent-card.json
 ```
 
-Start the API pointing at the workers. Passing the URLs on the command line leaves `.env`
-untouched (put them in `.env` to make it permanent):
+Then start the API pointing at the workers (environment variables on the command line leave `.env`
+untouched; put them in `.env` to make it permanent), ask a question and read the trace:
 
 ```bash
 FINSIGHT_A2A_RETRIEVAL_URL=http://127.0.0.1:9101 \
@@ -209,249 +194,17 @@ FINSIGHT_A2A_VERIFIER_URL=http://127.0.0.1:9103 \
 uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000
 ```
 
-Ask a question, then confirm it crossed process boundaries:
-
-```bash
-curl -s localhost:8000/ask -H 'content-type: application/json' \
-     -d '{"question": "What was NVIDIA data center revenue in its latest fiscal year?"}'
-uv run python -m finsight.trace_cli --last
-```
-
-Each worker terminal logs a `POST /rpc`. In the trace, every `a2a.call` span in `[api]` has a
-matching `a2a.handle` span in `[retrieval]`, `[facts]` or `[verifier]`. Stop everything with
-`Ctrl+C` in each terminal.
+Each worker terminal logs a `POST /rpc`, and in the trace every `a2a.call` span in `[api]` has a
+matching `a2a.handle` span in `[retrieval]`, `[facts]` or `[verifier]`.
 
 ### CLI
 
-```bash
-uv run python -m finsight.retrieval.cli "question" --ticker NVDA
-```
-
-## Testing
-
-Every way to check the project, from cheapest to most involved. The first three rows need no keys
-and no network.
-
-| Method | Command | Keys needed | A pass looks like |
-|---|---|---|---|
-| **Unit tests** | `uv run pytest` | none | all tests green |
-| **Lint and format** | `uv run ruff check . && uv run ruff format --check .` | none | no findings |
-| **MCP `calculate`** | [Inspector](#mcp-server), `calculate` with `ratio` | none | `value` 1.0714 for 391035 / 364984 |
-| **MCP data tools** | [Inspector](#mcp-server): `query_financials`, `search_filings`, `ask_finsight` | Anthropic, plus Pinecone for search | SQL and rows, cited passages, a verified answer |
-| **HTTP API** | `curl localhost:8000/ask ...` ([Quickstart](#quickstart) step 3) | Anthropic and Pinecone | JSON answer with `sources` and `verification.ok: true` |
-| **A2A agents** | [workers plus the API](#a2a-agents) | Anthropic and Pinecone | `POST /rpc` in each worker log; `a2a.call` and `a2a.handle` spans in the trace |
-| **Traces** | `uv run python -m finsight.trace_cli --last` | none | span tree with `errors 0` |
-| **Evals** | see below | Anthropic and Pinecone | see below |
-
-CI (`.github/workflows/ci.yml`) runs only the lint, format and `pytest` rows.
-
-**Evaluations** call Pinecone and Claude, so they cost money. `--smoke` restricts a run to the
-questions flagged as smoke tests.
-
-```bash
-uv run python -m finsight.evals.run --validate                   # every golden label matches a chunk
-uv run python -m finsight.evals.run --name baseline              # retrieval metrics
-uv run python -m finsight.evals.run --name e2e --e2e --verify on # full graph with the verifier
-```
-
-## Demo walkthrough
-
-A start-to-finish script that shows every interface: tests, the HTTP API, traces, the MCP server
-(Inspector and Claude Code), A2A agents and the CLI. Every command can be copy-pasted as written.
-Total time is about 6 minutes once the answers are cached (see step 0).
-
-### Before you start
-
-| Need | Check | Used for |
-|---|---|---|
-| Filings ingested | `ls data/finsight.duckdb` | everything except the tests |
-| `.env` with `ANTHROPIC_API_KEY` and `PINECONE_API_KEY` | `grep -c API_KEY .env` prints 2 or more | answers and search |
-| Node.js (for `npx`) | `node --version` | MCP Inspector |
-| Claude Code CLI | `claude --version` | MCP in Claude Code |
-| `jq` (optional) | `jq --version` | pretty-printed JSON |
-
-Use **four terminal tabs**, all started in the repository folder: **API**, **retrieval**,
-**facts** and **verifier**. Use a dark theme and a large font, and keep `.env` closed on screen.
-Nothing below prints a key. Ports used: 8000 (API), 8001 (MCP over HTTP, optional), 9100-9103
-(A2A), 6274 (Inspector).
-
-Suggested questions, each of which exercises a different route:
-
-| Route | Question |
-|---|---|
-| text | `What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?` |
-| facts | `What was NVIDIA data center revenue in its latest fiscal year?` |
-| both | `How did Apple's revenue change between fiscal 2023 and fiscal 2024, and what did the filing say about why?` |
-| comparison | `Compare Microsoft and NVIDIA revenue growth in fiscal 2025.` |
-
-### 0. Warm up (do this once, off camera)
-
-Running every question once fills the local cache, so the recording is fast and repeatable. This
-makes real API calls and costs a few cents.
-
-```bash
-uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000
-```
-
-In a second tab, ask each question above once, then stop the server with `Ctrl+C`:
-
-```bash
-curl -s localhost:8000/ask -H 'content-type: application/json' \
-     -d '{"question": "What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?"}' | jq .answer
-```
-
-### 1. Tests and lint (no keys, about 30 s)
-
-```bash
-uv run pytest
-uv run ruff check . && uv run ruff format --check .
-```
-
-Expect every test to pass and `All checks passed!`. CI runs exactly these.
-
-### 2. HTTP API, single process
-
-Tab **API**:
-
-```bash
-uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000
-```
-
-Another tab:
-
-```bash
-curl -s localhost:8000/health
-curl -s localhost:8000/ask -H 'content-type: application/json' \
-     -d '{"question": "What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?"}' | jq
-```
-
-Expect `{"status":"ok"}`, then JSON with an `answer` whose claims carry labels such as `[C4]`, a
-`sources` map that resolves each label to a filing, a `route`, and `verification.ok: true`.
-
-Save the trace ID for step 3:
-
-```bash
-TRACE=$(curl -s localhost:8000/ask -H 'content-type: application/json' \
-     -d '{"question": "What was NVIDIA data center revenue in its latest fiscal year?"}' | jq -r .trace_id)
-echo $TRACE
-```
-
-### 3. Traces
-
-```bash
-uv run python -m finsight.trace_cli --last
-uv run python -m finsight.trace_cli $TRACE
-curl -s localhost:8000/traces/$TRACE | jq '.spans | length'
-```
-
-Expect a span tree (`node.plan`, `node.retrieve`, `node.compose`, `node.verify`, and
-`node.revise` if the verifier asked for a rewrite) ending in `errors 0`. The same trace is served
-by `GET /traces/<id>`. Stop the API with `Ctrl+C` before step 5.
-
-### 4. MCP server
-
-**4a. MCP Inspector** (shows every tool and its raw output):
-
-```bash
-npx @modelcontextprotocol/inspector uv run python -m finsight.mcp_server
-```
-
-Open the printed `http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=...` URL, click **Connect**, then
-**Tools → List Tools**. Run the tools in this order:
-
-| # | Tool | Arguments | Expect |
-|---|---|---|---|
-| 1 | `calculate` | `op`: `ratio`, `inputs`: `{"numerator": 391035, "denominator": 364984}` | `value` 1.0714 and the `formula` |
-| 2 | `query_financials` | `question`: `Apple revenue for fiscal 2024` | generated `sql`, `rows` from DuckDB |
-| 3 | `search_filings` | `query`: `export restrictions China`, `tickers`: `["NVDA"]` | ranked passages with `ticker`, `section`, `accession_no` |
-| 4 | `ask_finsight` | `question`: `What was NVIDIA's data center revenue last fiscal year?` | cited, verified answer (slower) |
-
-Press `Ctrl+C` to stop the Inspector, which also stops the server it launched.
-
-**4b. Claude Code** (asking from a real client). Register once, from the repository folder:
-
-```bash
-claude mcp add finsight -- uv --directory "$(pwd)" run python -m finsight.mcp_server
-claude
-```
-
-Inside Claude Code, run `/mcp` and confirm `finsight` is connected, then ask:
-
-```text
-Use finsight to tell me how Microsoft's Azure revenue grew in fiscal 2025, with citations.
-```
-
-Approve the tool call when prompted. To remove the registration afterwards:
-
-```bash
-claude mcp remove finsight
-```
-
-"already exists" when adding just means it is registered. The optional HTTP transport is
-`uv run python -m finsight.mcp_server --transport streamable-http` (serves `http://127.0.0.1:8001/mcp`).
-
-### 5. A2A agents
-
-Start one worker per tab (**retrieval**, **facts**, **verifier**):
-
-```bash
-uv run python -m finsight.agents retrieval    # :9101
-uv run python -m finsight.agents facts        # :9102
-uv run python -m finsight.agents verifier     # :9103
-```
-
-In a fourth tab, prove each agent is up and show its Agent Card:
-
-```bash
-curl -s http://127.0.0.1:9101/health
-curl -s http://127.0.0.1:9101/.well-known/agent-card.json | jq
-curl -s http://127.0.0.1:9102/.well-known/agent-card.json | jq .name
-curl -s http://127.0.0.1:9103/.well-known/agent-card.json | jq .name
-```
-
-Start the API in the **API** tab, delegating to the workers (nothing in `.env` changes):
-
-```bash
-FINSIGHT_A2A_RETRIEVAL_URL=http://127.0.0.1:9101 \
-FINSIGHT_A2A_FACTS_URL=http://127.0.0.1:9102 \
-FINSIGHT_A2A_VERIFIER_URL=http://127.0.0.1:9103 \
-uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000
-```
-
-Ask a question, then read the trace:
-
-```bash
-curl -s localhost:8000/ask -H 'content-type: application/json' \
-     -d '{"question": "What was NVIDIA data center revenue in its latest fiscal year?"}' | jq .answer
-uv run python -m finsight.trace_cli --last
-```
-
-What to point at: a `POST /rpc` line appears in each worker tab, and every `a2a.call` span
-tagged `[api]` has a matching `a2a.handle` span tagged `[retrieval]`, `[facts]` or `[verifier]`.
-Stop all four tabs with `Ctrl+C`. If the API fails with a connection error, a worker is not
-running: start the workers first, or drop the `FINSIGHT_A2A_*_URL` variables.
-
-### 6. CLI retrieval (about 15 s)
+Retrieval plus a cited answer, without the orchestrator. `--retrieve-only` prints just the ranked
+passages.
 
 ```bash
 uv run python -m finsight.retrieval.cli "export restrictions China" --ticker NVDA
-uv run python -m finsight.retrieval.cli "export restrictions China" --ticker NVDA --retrieve-only
 ```
-
-The first prints a cited answer; `--retrieve-only` prints just the ranked passages.
-
-### Reset and troubleshooting
-
-| Symptom | Fix |
-|---|---|
-| `address already in use` on 8000 | `lsof -ti :8000 \| xargs kill` (the previous API is still running) |
-| `/ask` returns an error right after step 5 | a worker is down, or the `FINSIGHT_A2A_*_URL` variables are still set; restart the workers or unset them |
-| Empty or missing answers | check the keys in `.env` and that `data/finsight.duckdb` exists (run the ingestion step again; it is safe to repeat) |
-| Inspector cannot connect | use the full URL with the `MCP_PROXY_AUTH_TOKEN` it printed, and keep that tab open |
-| `finsight` missing in Claude Code's `/mcp` | re-run `claude mcp add` from the repository folder |
-| Demo is slow or costs money | run step 0 first; repeated questions are served from the local cache |
-
-The evaluations (`finsight.evals.run`) call paid APIs and are not part of the demo.
 
 ## Reading a response and its trace
 
@@ -521,6 +274,27 @@ question across both. Unlike the local files, LangSmith receives **content** (pr
 passages, answers); add `LANGSMITH_HIDE_INPUTS=true` and `LANGSMITH_HIDE_OUTPUTS=true` to send
 only the structure. Runs from separate A2A worker processes appear as their own top-level runs:
 filter on `finsight_trace_id` to line them up.
+
+## Testing
+
+```bash
+uv run pytest                                   # 180 offline tests: no keys, no network
+uv run ruff check . && uv run ruff format --check .
+```
+
+The tests replace Pinecone, the LLM and the network with fakes, so they exercise this code, not the
+services. They cover the SQL guard, the verifier, the router, the full graph, tracing, the MCP
+server, the A2A agents and the LangSmith export. CI (`.github/workflows/ci.yml`) runs exactly these
+two commands on every push.
+
+**Evaluations** call Pinecone and Claude, so they cost money. `--smoke` restricts a run to the
+questions flagged as smoke tests.
+
+```bash
+uv run python -m finsight.evals.run --validate                   # every golden label matches a chunk
+uv run python -m finsight.evals.run --name baseline              # retrieval metrics
+uv run python -m finsight.evals.run --name e2e --e2e --verify on # full graph with the verifier
+```
 
 ## Design rules
 
