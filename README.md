@@ -1,106 +1,104 @@
-# AI Market Intelligence
+# FinSight: Verified Q&A over SEC Filings
 
-A daily market briefing and Q&A system that combines prices, macroeconomic data, news headlines and SEC filings.
+An agentic RAG system that answers plain-English questions about Apple, Microsoft and NVIDIA 10-K/10-Q filings.
 
-**All computation happens in code (DuckDB + pandas). Claude Haiku 4.5 only narrates structured results, and every claim traces to a specific data path or document URL.**
+**Every claim carries a citation, every number comes from a database or a calculator (never the model), and a verifier checks the answer against its evidence before you see it.**
 
 ## Highlights
 
-- **Auditable citations:** claims cite a data path or document URL, and a validator strips invalid citations before output
-- **Free data:** Yahoo Finance, SEC EDGAR and GDELT, no paid sources
-- **Evaluation harness:** recomputes numbers from the database to verify the model's claims
-- **Streamlit dashboard:** regime analysis, sector heatmaps, yield curves and Q&A
-- **Cheap to run:** local DuckDB, Pinecone free tier, and disk-cached LLM responses
-- **Tested:** 59 offline tests on synthetic data
+- **Cited answers:** claims are labeled with `[C#]` text citations, `[F#]` database facts and `[K#]` calculations
+- **Verification loop:** a verifier checks that numbers appear in the evidence, citations exist, and claims are backed by verbatim quotes. On failure the answer is revised and re-verified up to a configurable limit
+- **Hybrid retrieval:** dense + sparse search in Pinecone with metadata filtering
+- **Structured facts:** guarded, allowlisted text-to-SQL over read-only XBRL financial data in DuckDB
+- **Many interfaces:** HTTP API, MCP server (Claude Desktop / Claude Code), A2A agents, CLI
+- **Full tracing:** a JSONL audit trail of every question with timing and spans, plus optional LangSmith
+- **Evaluated and tested:** 30 golden questions for evals, 180 offline tests, CI on every push
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    S[yfinance / SEC EDGAR / GDELT] --> I[Ingest]
-    I --> D[(DuckDB)]
-    I --> PC[(Pinecone)]
-    D --> A[Analytics: regimes, breadth, yield curve]
-    A --> G[LangGraph agent]
-    PC --> G
-    G --> L[Claude Haiku 4.5 narrates]
-    L --> V[Citation validator]
-    V --> UI[Streamlit briefing + Q&A]
-    D --> E[Eval harness]
-    V --> E
+    Q[Question] --> P[Plan]
+    P --> R[Retrieve]
+    P --> F[Facts]
+    R --> C[Compose]
+    F --> C
+    C --> V[Verify]
+    V -->|issues found| RV[Revise]
+    RV --> V
+    V -->|verified| A[Answer]
 ```
+
+1. **Plan:** rules extract metadata, then one LLM call routes the question to text, facts or both
+2. **Retrieve:** hybrid Pinecone search with metadata filtering
+3. **Facts:** text-to-SQL restricted to allowlisted queries over XBRL data
+4. **Compose:** Claude writes the answer with claim labels
+5. **Verify:** checks numbers, citations and claim support
+6. **Revise / Finalize:** rewrites if issues are found, and adds caveats if something stays unverified
+
+Retrieval, facts and verification can optionally run as separate A2A agent services.
 
 ## Tech stack
 
-Python · DuckDB · pandas · LangGraph · Pinecone · Claude Haiku 4.5 · Streamlit · yfinance · pytest
+LangGraph · Pinecone · DuckDB · Claude Haiku 4.5 · FastAPI · MCP · GitHub Actions
 
 ## Project structure
 
 ```
-src/market_intel/
-  ingest/      price, news and filing fetchers
-  analytics/   regime calculation and data loading
-  retrieval/   Pinecone chunking and indexing
-  agents/      LangGraph graph, tools, prompts
-  llm/         Haiku client with caching
-  eval/        claim verification against DuckDB
-  app/         Streamlit interface
+src/finsight/
+  ingestion/     SEC parsing, chunking, embedding, store loading
+  retrieval/     hybrid search and cited answers
+  orchestrator/  router, graph, calculations, verifier
+  tools/         guarded SQL and deterministic calculator
+  api/           FastAPI endpoints
+  mcp_server/    MCP protocol server
+  agents/        A2A worker implementations
+  evals/         evaluation metrics on 30 golden questions
+  tracing.py     span recording and timeline viewer
 ```
 
 ## Quickstart
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-pytest                                           # free, ~5 seconds
-PYTHONPATH=src python -m market_intel.scripts.run_phase1
-```
-
-**Streamlit app** (free mock writer, or about 1.6¢ per real briefing):
+**Requirements:** macOS/Linux, Python 3.11, [uv](https://github.com/astral-sh/uv), a free Pinecone account, an Anthropic API key.
 
 ```bash
-PYTHONPATH=src streamlit run src/market_intel/app/streamlit_app.py
+git clone git@github.com:AtharvaMusale/finsight.git
+cd finsight
+cp .env.example .env     # set SEC_USER_AGENT, PINECONE_API_KEY, ANTHROPIC_API_KEY
+uv sync
+uv run python -m finsight.ingestion.pipeline   # ingest filings once
+uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000
 ```
 
-**Daily briefing:**
+In another terminal:
 
 ```bash
-PYTHONPATH=src python -m market_intel.scripts.run_briefing --dry-run
+curl -s localhost:8000/ask -H 'content-type: application/json' \
+  -d '{"question": "What drove Azure growth at Microsoft?"}'
 ```
 
-**Evaluation harness** (about 5¢ for a full run with the real model):
+View traces:
 
 ```bash
-PYTHONPATH=src python -m market_intel.scripts.run_eval --run-questions
+uv run python -m finsight.trace_cli --last
 ```
+
+## Testing
+
+```bash
+uv run pytest   # 180 offline tests, mocked services, no keys or network needed
+```
+
+CI runs lint and tests on every push via GitHub Actions.
 
 ## Design principles
 
-1. Numbers are computed in code, never by the LLM
-2. Every claim cites sources with traceable IDs
-3. Invalid citations are removed automatically by the validator
-4. Data stays local (DuckDB is git-ignored) and is never republished
-5. Evaluation checks numeric accuracy against the original computations
-
-## Cost profile
-
-| Item | Cost |
-|---|---|
-| Data (yfinance, EDGAR, GDELT) | Free |
-| Compute (local DuckDB) | Free |
-| Pinecone | Free tier (about 77k of 5M monthly tokens used) |
-| Claude Haiku | About 1.6¢ per briefing, about 5¢ per full eval (cached repeats are free) |
-| **Total project cost** | **About 15¢** |
-
-## Limitations
-
-- Yahoo Finance data is unofficial and may be delayed
-- Breadth analysis covers 11 Vanguard sector ETFs, not the full S&P 500
-- No credit-spread data, so the yield curve uses a 10Y–2Y proxy
-- GDELT news is headlines only, with no article text
-- The eval checks numbers and citations, not interpretation or directional accuracy
+- Filings are treated as untrusted text: chunks are wrapped as data, not instructions
+- Numbers come only from databases or calculators
+- Tools are guarded: read-only SQL, no `eval`
+- Agents validate responses and fail closed on outages
+- Binds to `127.0.0.1` only. A2A agents have no authentication, so don't expose them publicly
 
 ## Disclaimer
 
-A research tool, not investment advice.
+A research project, not investment advice.
