@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FinSight</title>
+<meta name="description" content="An agentic RAG analyst over SEC filings: cited claims, numbers from a database, answers checked by a verifier.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3l13 26H3z' fill='%23ededed'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="ui.css">
+</head>
+<body>
+<a class="skip" href="#ask">Skip to content</a>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="FinSight home"><i class="brand-mark"></i><span>FinSight</span></a>
+    <nav aria-label="Sections">
+      <a href="#ask">Ask</a>
+      <a href="#trace">Trace</a>
+      <a href="#how">How it works</a>
+      <a href="#use">Ways to use</a>
+      <a href="#system">System</a>
+      <button class="icon-btn" id="theme" type="button" aria-label="Toggle light and dark theme" title="Toggle theme">◐</button>
+      <a class="btn small" href="https://github.com/AtharvaMusale/finsight" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav>
+  </div>
+  <div class="progress" id="progress"></div>
+</header>
+
+<main class="frame" id="top">
+
+  <section class="band hero">
+    <div class="hero-grid"></div><div class="hero-glow"></div>
+    <div class="hero-text">
+      <p class="badge" id="badge"><span class="dot" id="badge-dot"></span><span id="badge-text">Checking the server…</span></p>
+      <h1>Ask the filings.<br><span class="spectrum-text">Check the answer.</span></h1>
+      <p class="lede">An agentic RAG analyst over SEC filings. Every claim is cited, every number comes from a database or a calculator instead of the model, and a verifier checks the answer before you see it.</p>
+      <div class="cta">
+        <a class="btn primary" href="#ask">Ask a question</a>
+        <a class="btn" href="#how">See how it works</a>
+        <a class="btn" href="#use">All the ways to use it</a>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><strong>3</strong><span>companies: Apple, Microsoft, NVIDIA (10-K and 10-Q)</span></div>
+      <div class="stat"><strong>4</strong><span>ways in: HTTP, MCP, A2A and the CLI</span></div>
+      <div class="stat"><strong>3</strong><span>verifier layers: numbers, citations, claim critic</span></div>
+      <div class="stat"><strong>1</strong><span>model: Claude Haiku 4.5 for everything</span></div>
+    </div>
+  </section>
+
+  <!-- 01 ASK -->
+  <section class="band reveal" id="ask">
+    <p class="label"><span>01</span> Ask</p>
+    <div class="head">
+      <h2>Ask a question, watch it get checked.</h2>
+      <p class="sub">The pipeline lights up as the question moves through it. Sample mode replays a real recorded run with no network. Live mode calls this server's <code>/ask</code>.</p>
+    </div>
+
+    <div class="console">
+      <div class="console-bar">
+        <span>question console</span>
+        <div class="seg" role="group" aria-label="Mode">
+          <button type="button" id="mode-sample" aria-pressed="true">Sample</button>
+          <button type="button" id="mode-live" aria-pressed="false">Live</button>
+        </div>
+      </div>
+      <form class="ask-form" id="ask-form">
+        <div class="ask-row">
+          <textarea id="q" rows="2" maxlength="500" aria-label="Your question" placeholder="Ask about Apple, Microsoft or NVIDIA filings…"></textarea>
+          <button class="btn primary" id="go" type="submit">Ask</button>
+        </div>
+        <div class="chips" id="chips" aria-label="Example questions"></div>
+        <p class="note" id="mode-note"></p>
+      </form>
+      <div class="strip" id="strip" aria-label="Pipeline progress"></div>
+      <div class="result" id="result" aria-live="polite">
+        <p class="empty">Press <b>Ask</b> to run the pipeline.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 TRACE -->
+  <section class="band reveal" id="trace">
+    <p class="label"><span>02</span> Trace</p>
+    <div class="head">
+      <h2>Every step is a span.</h2>
+      <p class="sub">One trace ID follows a question through the graph and across A2A services. Spans hold counts, timings and error types only, never prompts or filing text.</p>
+    </div>
+    <div class="trace-grid">
+      <aside class="trace-side">
+        <span class="eyebrow label" style="margin:0">Recent questions</span>
+        <div class="tlist" id="tlist"></div>
+        <form id="tid-form">
+          <input id="tid" aria-label="Trace ID" placeholder="paste a trace ID" autocomplete="off" spellcheck="false">
+          <button class="btn small" type="submit">Open</button>
+        </form>
+        <p class="note" id="tnote"></p>
+      </aside>
+      <div class="trace-main" id="trace-main"><p class="empty">Pick a run on the left.</p></div>
+    </div>
+  </section>
+
+  <!-- 03 HOW -->
+  <section class="band reveal" id="how">
+    <p class="label"><span>03</span> How it works</p>
+    <div class="head">
+      <h2>A graph of small steps, with code at the edges.</h2>
+      <p class="sub">A LangGraph pipeline. Language-model steps are boxed in by code that retrieves, calculates and verifies.</p>
+    </div>
+    <div class="how">
+      <div>
+        <ul class="legend"><li class="k-llm">Language model</li><li class="k-code">Plain code</li><li class="k-store">Search and data</li></ul>
+        <ol class="pipe">
+          <li class="k-llm"><i class="n"></i><div><h3>Plan <small>rules + 1 cheap call</small></h3><p>Rules pull out tickers, years, form type and section hints. One small call decides whether the question needs numbers, an explanation, or both. A comparison becomes one sub-query per company and year.</p></div></li>
+          <li class="k-store"><i class="n"></i><div><h3>Retrieve <small>hybrid search</small></h3><p>One dense plus sparse Pinecone search, narrowed by a metadata filter (ticker, year, form, section).</p></div></li>
+          <li class="k-code"><i class="n"></i><div><h3>Facts <small>guarded SQL</small></h3><p>Text-to-SQL over a read-only view of the XBRL facts. The SQL must be one allowlisted SELECT. A calculator does growth and margins.</p></div></li>
+          <li class="k-llm"><i class="n"></i><div><h3>Compose <small>cited answer</small></h3><p>Writes the answer and labels each claim: <code>[C#]</code> filing text, <code>[F#]</code> a database row, <code>[K#]</code> a calculation.</p></div></li>
+          <li class="k-code"><i class="n"></i><div><h3>Verify <small>three layers</small></h3><p>Code checks that every number appears in the evidence and every label exists. A critic must back each claim with a verbatim quote, and code confirms the quote is really in the cited text.</p></div></li>
+          <li class="k-llm"><i class="n"></i><div><h3>Revise <small>capped loop</small></h3><p>Problems go back to the writer, at most <code>max_revisions</code> times (default 1).</p></div></li>
+          <li class="k-code"><i class="n"></i><div><h3>Finalize <small>caveat by code</small></h3><p>Anything still unsupported is marked with a caveat added by code, never by the model. The disclaimer is added here too.</p></div></li>
+        </ol>
+      </div>
+      <div>
+        <div class="rules">
+          <div class="rule"><h3>Numbers never come from the model</h3><p>They come from DuckDB rows or the calculator, and the verifier rejects any number that appears in no evidence.</p></div>
+          <div class="rule"><h3>Filings are untrusted text</h3><p>Chunks are wrapped as data, so instructions hidden in a filing are never followed.</p></div>
+          <div class="rule"><h3>Tools are guarded</h3><p>SQL is read-only and allowlisted. The calculator has named operations and no <code>eval</code>.</p></div>
+          <div class="rule"><h3>Agents distrust each other</h3><p>A2A responses are schema-validated and size-capped, and a verifier outage fails closed with a caveat.</p></div>
+          <div class="rule"><h3>Local only</h3><p>The API, MCP and A2A agents bind to 127.0.0.1. The A2A agents have no authentication, so do not expose them to a network.</p></div>
+        </div>
+        <div class="stores">
+          <div><b>Pinecone</b>Passages for semantic search (hybrid dense + sparse).</div>
+          <div><b>DuckDB</b>Filings, chunks and XBRL facts, opened read-only when answering.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 USE -->
+  <section class="band reveal" id="use">
+    <p class="label"><span>04</span> Ways to use</p>
+    <div class="head">
+      <h2>Four ways in, one pipeline.</h2>
+      <p class="sub">All of them run the same graph and leave a trace you can open above. Every command can be copied as written.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Ways to use FinSight" id="tabs">
+      <button class="tab" role="tab" aria-controls="p-setup" aria-selected="true" id="t-setup">Setup</button>
+      <button class="tab" role="tab" aria-controls="p-http" aria-selected="false" id="t-http">HTTP API</button>
+      <button class="tab" role="tab" aria-controls="p-mcp" aria-selected="false" id="t-mcp">MCP</button>
+      <button class="tab" role="tab" aria-controls="p-a2a" aria-selected="false" id="t-a2a">A2A agents</button>
+      <button class="tab" role="tab" aria-controls="p-cli" aria-selected="false" id="t-cli">CLI</button>
+      <button class="tab" role="tab" aria-controls="p-tests" aria-selected="false" id="t-tests">Tests</button>
+      <button class="tab" role="tab" aria-controls="p-ls" aria-selected="false" id="t-ls">LangSmith</button>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-setup" aria-labelledby="t-setup">
+      <div>
+        <h3>Set it up once</h3>
+        <p>You need Python 3.11, <a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a>, a free Pinecone account and an Anthropic API key.</p>
+        <ul>
+          <li><code>FINSIGHT_SEC_USER_AGENT</code>: the SEC requires a real contact, for example <code>"MyApp you@example.com"</code></li>
+          <li><code>PINECONE_API_KEY</code> and <code>ANTHROPIC_API_KEY</code></li>
+          <li>Keys live only in <code>.env</code>, which is gitignored.</li>
+        </ul>
+      </div>
+      <div class="stack">
+        <div class="code"><div class="cap">1 · install</div><pre>git clone git@github.com:AtharvaMusale/finsight.git
+cd finsight
+cp .env.example .env     # then add your keys
+uv sync</pre></div>
+        <div class="code"><div class="cap">2 · ingest the filings (once, safe to repeat)</div><pre>uv run python -m finsight.ingestion.pipeline</pre></div>
+        <div class="code"><div class="cap">3 · start the server and open this page</div><pre>uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000</pre></div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-http" aria-labelledby="t-http" hidden>
+      <div>
+        <h3>HTTP API</h3>
+        <p>Best for scripts and UIs. This page is a client of it. FastAPI also serves an interactive page at <a href="/docs" target="_blank">/docs</a> where you can try each endpoint.</p>
+        <p>Every response carries an <code>X-Trace-Id</code> header and a <code>trace_id</code> field, so one request can be followed everywhere.</p>
+      </div>
+      <div class="stack">
+        <div class="code"><div class="cap">ask a question</div><pre>curl -s localhost:8000/ask -H 'content-type: application/json' \
+  -d '{"question": "What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?"}'</pre></div>
+        <div class="table-wrap"><table class="t"><thead><tr><th>Endpoint</th><th>Returns</th></tr></thead><tbody>
+          <tr><td>POST /ask</td><td>cited answer, sources, route, verification, trace ID</td></tr>
+          <tr><td>GET /traces</td><td>the newest questions, one summary row each</td></tr>
+          <tr><td>GET /traces/{id}</td><td>every span for one trace</td></tr>
+          <tr><td>GET /status</td><td>model, keys present (yes/no), A2A agent reachability</td></tr>
+          <tr><td>GET /health</td><td><code>{"status":"ok"}</code></td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-mcp" aria-labelledby="t-mcp" hidden>
+      <div>
+        <h3>MCP server</h3>
+        <p>Four read-only tools any MCP client can call, such as Claude Code or Claude Desktop. The server speaks stdio and is started by its client.</p>
+        <p>Start with <code>calculate</code>: it needs no keys or data. Every response carries a <code>trace_id</code>.</p>
+      </div>
+      <div class="stack">
+        <div class="table-wrap"><table class="t"><thead><tr><th>Tool</th><th>What it does</th></tr></thead><tbody>
+          <tr><td>calculate</td><td>ratio, pct_change, margin, cagr with named inputs</td></tr>
+          <tr><td>query_financials</td><td>text-to-SQL over the XBRL facts; returns SQL, rows, calculations</td></tr>
+          <tr><td>search_filings</td><td>hybrid search; ranked passages with ticker, section, accession number</td></tr>
+          <tr><td>ask_finsight</td><td>the whole verified pipeline in one call (slower)</td></tr>
+        </tbody></table></div>
+        <div class="code"><div class="cap">use it from Claude Code (once)</div><pre>claude mcp add finsight -- uv --directory "$(pwd)" run python -m finsight.mcp_server</pre></div>
+        <div class="code"><div class="cap">or try the tools in the MCP Inspector</div><pre>npx @modelcontextprotocol/inspector uv run python -m finsight.mcp_server</pre></div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-a2a" aria-labelledby="t-a2a" hidden>
+      <div>
+        <h3>A2A agents</h3>
+        <p>Retrieval, facts and verification can run as separate services that publish an Agent Card. The API delegates to an agent only when its URL is set, and anything unset stays in-process.</p>
+        <p><b>Once a URL is set, <code>/ask</code> fails if that agent is not running</b>, so start the workers first. Remove the variable to go back to single-process mode.</p>
+        <ul id="a2a-live"><li>Live status loads from <code>/status</code>.</li></ul>
+      </div>
+      <div class="stack">
+        <div class="code"><div class="cap">start each worker in its own terminal</div><pre>uv run python -m finsight.agents retrieval   # :9101
+uv run python -m finsight.agents facts       # :9102
+uv run python -m finsight.agents verifier    # :9103</pre></div>
+        <div class="code"><div class="cap">read an Agent Card</div><pre>curl -s http://127.0.0.1:9101/.well-known/agent-card.json</pre></div>
+        <div class="code"><div class="cap">point the API at the workers</div><pre>FINSIGHT_A2A_RETRIEVAL_URL=http://127.0.0.1:9101 \
+FINSIGHT_A2A_FACTS_URL=http://127.0.0.1:9102 \
+FINSIGHT_A2A_VERIFIER_URL=http://127.0.0.1:9103 \
+uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000</pre></div>
+        <p class="note">In the trace, every <code>a2a.call</code> span in <code>[api]</code> has a matching <code>a2a.handle</code> span in the worker that served it.</p>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-cli" aria-labelledby="t-cli" hidden>
+      <div>
+        <h3>Command line</h3>
+        <p>Retrieval plus a cited answer without the orchestrator, and a timeline viewer for traces. <code>--retrieve-only</code> prints just the ranked passages, which is useful for checking search quality.</p>
+      </div>
+      <div class="stack">
+        <div class="code"><div class="cap">cited answer from retrieval</div><pre>uv run python -m finsight.retrieval.cli "export restrictions China" --ticker NVDA</pre></div>
+        <div class="code"><div class="cap">passages only</div><pre>uv run python -m finsight.retrieval.cli "export restrictions China" --ticker NVDA --retrieve-only</pre></div>
+        <div class="code"><div class="cap">trace timeline</div><pre>uv run python -m finsight.trace_cli --last
+uv run python -m finsight.trace_cli &lt;trace_id&gt;</pre></div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-tests" aria-labelledby="t-tests" hidden>
+      <div>
+        <h3>Tests and evaluations</h3>
+        <p>The unit tests replace Pinecone, the language model and the network with fakes, so they need no keys and cost nothing. They cover the SQL guard, the verifier, the router, the full graph, tracing, MCP, A2A and the LangSmith export. CI runs the first two commands on every push.</p>
+        <p><b>Evaluations call Pinecone and Claude, so they cost money.</b> They are not part of CI.</p>
+      </div>
+      <div class="stack">
+        <div class="code"><div class="cap">offline, free</div><pre>uv run pytest
+uv run ruff check . &amp;&amp; uv run ruff format --check .</pre></div>
+        <div class="code"><div class="cap">evaluations (paid)</div><pre>uv run python -m finsight.evals.run --validate
+uv run python -m finsight.evals.run --name baseline
+uv run python -m finsight.evals.run --name e2e --e2e --verify on</pre></div>
+      </div>
+    </div>
+
+    <div class="panel" role="tabpanel" id="p-ls" aria-labelledby="t-ls" hidden>
+      <div>
+        <h3>Optional: LangSmith</h3>
+        <p>Off by default. Each question appears as one <code>finsight.ask</code> run with a child per graph node, plus the model calls (with token usage), the Pinecone search and the SQL tool, all carrying the same <code>finsight_trace_id</code> as the local traces.</p>
+        <p><b>Unlike the local trace files, LangSmith receives content</b> (prompts, filing passages, answers). Add the two hide flags to send only the structure. Restart the server after changing <code>.env</code>.</p>
+      </div>
+      <div class="stack">
+        <div class="code"><div class="cap">add to .env, then restart</div><pre>LANGSMITH_TRACING=true
+LANGSMITH_API_KEY=...        # your own key
+LANGSMITH_PROJECT=finsight
+# optional: send structure only
+LANGSMITH_HIDE_INPUTS=true
+LANGSMITH_HIDE_OUTPUTS=true</pre></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 SYSTEM -->
+  <section class="band reveal" id="system">
+    <p class="label"><span>05</span> System</p>
+    <div class="sys-head">
+      <div class="head" style="margin:0"><h2>What this server can do right now.</h2></div>
+      <button class="btn small" id="refresh" type="button">Refresh</button>
+    </div>
+    <p class="sub" style="color:var(--muted);margin-bottom:28px;max-width:640px">Read from <code>/status</code>. It reports whether keys exist, never their values.</p>
+    <div class="sys" id="sys"><div><h3>Loading</h3><div class="row">Asking the server…</div></div></div>
+  </section>
+</main>
+
+<footer>
+  <span>Not financial advice. FinSight summarises public SEC filings and does not recommend anything.</span>
+  <span><a href="https://github.com/AtharvaMusale/finsight" target="_blank" rel="noopener">Source on GitHub</a></span>
+</footer>
+
+<script src="ui.js" defer></script>
+</body>
+</html>

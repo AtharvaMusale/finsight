@@ -15,8 +15,12 @@ import re
 import uuid
 from contextlib import asynccontextmanager
 from dataclasses import asdict
+from pathlib import Path
 
+import httpx
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from finsight.config import Settings, get_settings
@@ -79,12 +83,81 @@ async def trace_id_header(request: Request, call_next):
     return response
 
 
+STATIC_DIR = Path(__file__).parent / "static"
+
+
+@app.get("/", include_in_schema=False)
+def home() -> RedirectResponse:
+    return RedirectResponse("/ui/")
+
+
 @app.get("/health")
 def health() -> dict:
     return {"status": "ok"}
 
 
+@app.get("/status")
+async def status() -> dict:
+    """What this deployment is set up to do. Booleans and names only, never a key or its value."""
+    s = get_settings()
+    urls = {
+        "retrieval": s.a2a_retrieval_url,
+        "facts": s.a2a_facts_url,
+        "verifier": s.a2a_verifier_url,
+    }
+
+    async def probe(client: httpx.AsyncClient, url: str | None) -> bool | None:
+        if not url:
+            return None  # not configured: this capability runs in-process
+        try:
+            return (await client.get(url.rstrip("/") + "/health")).status_code == 200
+        except httpx.HTTPError:
+            return False
+
+    # Only the URLs from this deployment's own settings are probed, never a caller-supplied one.
+    async with httpx.AsyncClient(timeout=1.0) as client:
+        ups = await asyncio.gather(*(probe(client, u) for u in urls.values()))
+    agents = [
+        {"name": n, "url": u, "configured": bool(u), "up": up}
+        for (n, u), up in zip(urls.items(), ups, strict=True)
+    ]
+    return {
+        "model": s.llm_model,
+        "verify": s.verify,
+        "max_revisions": s.max_revisions,
+        "tracing": s.tracing,
+        "langsmith": bool(s.langsmith_tracing and s.langsmith_api_key),
+        "keys": {
+            "anthropic": s.anthropic_api_key is not None,
+            "pinecone": s.pinecone_api_key is not None,
+        },
+        "facts_db": s.duckdb_path.exists(),
+        "mode": "a2a" if any(a["configured"] for a in agents) else "in-process",
+        "agents": agents,
+    }  # fmt: skip
+
+
 _TRACE_ID = re.compile(r"^[A-Za-z0-9_-]{1,64}$")
+_ROOT_ATTRS = ("route", "revisions", "verified", "question_chars")
+
+
+@app.get("/traces")
+def list_traces(limit: int = 15) -> dict:
+    """The newest questions this deployment answered: one summary row per trace."""
+    s = get_settings()
+    if not s.tracing:
+        return {"tracing": False, "traces": []}
+    spans = read_spans(s.trace_dir) if s.trace_dir.exists() else []
+    roots = [r for r in spans if r.get("parent") is None and r.get("name") == "ask"]
+    roots.sort(key=lambda r: r.get("ts", 0), reverse=True)
+    rows = [
+        {
+            "trace_id": r["trace"], "ts": r.get("ts"), "ms": r.get("ms"), "ok": r.get("ok"),
+            **{k: (r.get("attrs") or {}).get(k) for k in _ROOT_ATTRS},
+        }
+        for r in roots[: max(1, min(limit, 50))]
+    ]  # fmt: skip
+    return {"tracing": True, "traces": rows}
 
 
 @app.get("/traces/{trace_id}")
@@ -160,3 +233,7 @@ async def ask_endpoint(body: AskRequest, request: Request) -> dict:
         raise HTTPException(502, f"upstream failure (trace {trace_id})") from None
 
     return answer_payload(state, trace_id)
+
+
+# Mounted last so it can never shadow an API route.
+app.mount("/ui", StaticFiles(directory=STATIC_DIR, html=True), name="ui")

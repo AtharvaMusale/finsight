@@ -1,0 +1,234 @@
+{
+ "note": "A real response and trace recorded from a cached run (see the README). Timings are tiny because the run was served from the local cache.",
+ "question": "What drove growth in Azure and other cloud services at Microsoft in fiscal 2025?",
+ "response": {
+  "trace_id": "3e19fa254fb3444bab861c9ede1490d6",
+  "answer": "According to the filing, Azure and other cloud services revenue grew 34% in fiscal 2025, driven by \"demand for our portfolio of services\" [C4].",
+  "disclaimer": "Not financial advice. This is an automated summary of public SEC filings.",
+  "route": "text",
+  "sub_queries": [],
+  "sources": {
+   "C4": {
+    "source": "MSFT 10-K FY2025, Item 7",
+    "accession_no": "0000950170-25-100235",
+    "chunk_id": null
+   }
+  },
+  "facts": {},
+  "calculations": {},
+  "verification": {
+   "ok": true,
+   "claims_checked": 1,
+   "critic_ran": true,
+   "revisions": 1,
+   "issues": []
+  },
+  "invalid_citations": [],
+  "warnings": []
+ },
+ "trace": {
+  "trace_id": "3e19fa254fb3444bab861c9ede1490d6",
+  "spans": [
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s01",
+    "parent": null,
+    "name": "ask",
+    "service": "api",
+    "ts": 1760000000.0,
+    "ms": 14.2,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "question_chars": 80,
+     "route": "text",
+     "revisions": 1,
+     "verified": true
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s02",
+    "parent": "s01",
+    "name": "node.plan",
+    "service": "api",
+    "ts": 1760000000.0001,
+    "ms": 0.1,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "route": "text",
+     "subqueries": 1
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s03",
+    "parent": "s01",
+    "name": "node.retrieve",
+    "service": "api",
+    "ts": 1760000000.0003,
+    "ms": 0.7,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "hits": 6
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s04",
+    "parent": "s03",
+    "name": "search",
+    "service": "api",
+    "ts": 1760000000.0004,
+    "ms": 0.5,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "limit": 30,
+     "alpha": 0.5,
+     "filtered": true,
+     "cached": true,
+     "hits": 30
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s05",
+    "parent": "s01",
+    "name": "node.compose",
+    "service": "api",
+    "ts": 1760000000.0011,
+    "ms": 0.4,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "draft_chars": 436,
+     "no_evidence": false
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s06",
+    "parent": "s05",
+    "name": "llm",
+    "service": "api",
+    "ts": 1760000000.0012,
+    "ms": 0.3,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "model": "anthropic/claude-haiku-4-5-20251001",
+     "cached": true
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s07",
+    "parent": "s01",
+    "name": "node.verify",
+    "service": "api",
+    "ts": 1760000000.0016,
+    "ms": 3.4,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "issues": 1,
+     "kinds": "unsupported_claim",
+     "critic_ran": true,
+     "claims": 2
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s08",
+    "parent": "s07",
+    "name": "llm",
+    "service": "api",
+    "ts": 1760000000.0018,
+    "ms": 0.2,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "model": "anthropic/claude-haiku-4-5-20251001",
+     "cached": true
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s09",
+    "parent": "s01",
+    "name": "node.revise",
+    "service": "api",
+    "ts": 1760000000.0051,
+    "ms": 0.3,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "revisions": 1
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s10",
+    "parent": "s09",
+    "name": "llm",
+    "service": "api",
+    "ts": 1760000000.0052,
+    "ms": 0.2,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "model": "anthropic/claude-haiku-4-5-20251001",
+     "cached": true
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s11",
+    "parent": "s01",
+    "name": "node.verify",
+    "service": "api",
+    "ts": 1760000000.0055,
+    "ms": 3.2,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "issues": 0,
+     "critic_ran": true,
+     "claims": 1
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s12",
+    "parent": "s11",
+    "name": "llm",
+    "service": "api",
+    "ts": 1760000000.0057,
+    "ms": 0.2,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "model": "anthropic/claude-haiku-4-5-20251001",
+     "cached": true
+    }
+   },
+   {
+    "trace": "3e19fa254fb3444bab861c9ede1490d6",
+    "span": "s13",
+    "parent": "s01",
+    "name": "node.finalize",
+    "service": "api",
+    "ts": 1760000000.0088,
+    "ms": 0.0,
+    "ok": true,
+    "error": null,
+    "attrs": {
+     "caveat": false
+    }
+   }
+  ]
+ }
+}

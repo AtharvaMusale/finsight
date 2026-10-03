@@ -124,12 +124,47 @@ uv run python -m finsight.trace_cli --last
 
 ## Using FinSight
 
-Four ways in. All of them run the same pipeline and leave a trace you can inspect.
+Four ways in, plus a web page. All of them run the same pipeline and leave a trace you can inspect.
+
+### Web UI
+
+A single page served by the API itself: no build step, no extra install, and no network access
+beyond the server.
+
+```bash
+uv run uvicorn finsight.api.app:app --host 127.0.0.1 --port 8000
+```
+
+Open <http://127.0.0.1:8000/> (it redirects to `/ui/`). The top badge shows whether the server is
+ready.
+
+| Section | What to do with it |
+|---|---|
+| **Ask** | Type a question and press **Ask** (or `Ctrl/Cmd+Enter`). The strip shows each step as it runs, and steps that did not apply are dimmed. Click a citation chip such as `C4` to jump to its evidence: a filing passage (`C`), a database row (`F`) or a calculation (`K`). The badge says whether the verifier passed, and how many claims it checked and revisions it needed. |
+| **Trace** | Pick a recent question, or paste a trace ID, to see every span as a waterfall. Click a row for its attributes. Spans hold counts and timings only, never prompts or filing text. |
+| **How it works** | The pipeline and the design rules. |
+| **Ways to use** | Copy-paste commands for setup, the HTTP API, MCP, A2A, the CLI, tests and LangSmith. Each code box has a **Copy** button. |
+| **System** | Whether the Anthropic and Pinecone keys exist (never their values), whether the filings database was found, and whether each A2A agent is running. |
+
+**Sample and Live mode.** The page opens in **Sample** mode, which replays one recorded run from
+this README with no network and no cost, so it is safe for a demo or a first look. Switch to
+**Live** to ask your own questions. Each Live question runs the real pipeline and makes model and
+search calls (a few cents), so it needs the keys in `.env` and the ingested filings (see the
+System section for what is missing).
+
+**Troubleshooting**
+
+| Symptom | Fix |
+|---|---|
+| Badge says "Server unreachable" | Start the server with the command above, then refresh. |
+| Live question fails with "could not finish" | If the `FINSIGHT_A2A_*_URL` lines are set in `.env`, the matching workers must be running (see [A2A agents](#a2a-agents)); the page names the ones that are down. Otherwise check the keys and that ingestion ran. |
+| "Trace" list is empty | Tracing is off (`FINSIGHT_TRACING=false`), or no Live question has been asked yet. The sample run is always listed. |
+| Page looks unstyled | Load it from the server's `/ui/` address, not from the file on disk. |
 
 ### HTTP API
 
-Start it as in the Quickstart. It exposes `POST /ask`, `GET /traces/{id}` and `GET /health`, and
-FastAPI serves an interactive page at <http://127.0.0.1:8000/docs> where you can try `POST /ask`
+Start it as in the Quickstart. It exposes `POST /ask`, `GET /traces` (recent questions), `GET /traces/{id}`, `GET /status` and
+`GET /health`, and FastAPI serves an interactive page at <http://127.0.0.1:8000/docs> where you can try `POST /ask`
 from the browser.
 
 ### MCP server
@@ -330,7 +365,7 @@ src/finsight/
   retrieval/     hybrid search, cited answers, cache, CLI
   orchestrator/  router, LangGraph graph, calculations, answer composition, verifier
   tools/         guarded text-to-SQL, deterministic calculator
-  api/           FastAPI app (/ask, /traces, /health)
+  api/           FastAPI app (/ask, /traces, /status, /health) and the web UI (api/static/)
   mcp_server/    MCP server (stdio, optional streamable HTTP)
   agents/        A2A agents: retrieval, facts, verifier, analyst
   evals/         golden-set runner and metrics
